@@ -29,7 +29,7 @@ public class SimulatiePanel extends Pane {
     private final Canvas canvas;
     private final GraphicsContext gc;
 
-    private AnimationTimer gameLoop;
+    private AnimationTimer simulatieLoop;
 
     public SimulatiePanel() {
 
@@ -52,7 +52,7 @@ public class SimulatiePanel extends Pane {
 
     public void startGame() {
 
-        gameLoop = new AnimationTimer() {
+        simulatieLoop = new AnimationTimer() {
 
             private long lastTime = 0;
 
@@ -74,7 +74,7 @@ public class SimulatiePanel extends Pane {
             }
         };
 
-        gameLoop.start();
+        simulatieLoop.start();
     }
 
     public void update(double deltaTime) {
