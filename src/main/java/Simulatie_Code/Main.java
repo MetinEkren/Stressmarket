@@ -2,30 +2,28 @@ package Simulatie_Code;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
     @Override
-    public void start(Stage stage) {
-
+    public void start(Stage primaryStage) {
         SimulatiePanel simulatiePanel = new SimulatiePanel();
 
-        Scene scene = new Scene(
-                simulatiePanel,
-                simulatiePanel.getScreenWidth(),
-                simulatiePanel.getScreenHeight()
-        );
+        StackPane root = new StackPane();
+        root.getChildren().add(simulatiePanel);
+//        // Achtergrondkleur van de container instellen (vergelijkbaar met setBackground)
+//        root.setStyle("-fx-background-color: black;");
 
-        stage.setTitle("Market Simulatie");
-        stage.setResizable(false);
-        stage.setScene(scene);
-        stage.show();
+        Scene scene = new Scene(root, simulatiePanel.screenWidth, simulatiePanel.screenHeight);
 
-        simulatiePanel.startGame();
-    }
+        primaryStage.setTitle("Market Simulatie");
+        primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
+        primaryStage.centerOnScreen();
+        primaryStage.show();
 
-    public static void main(String[] args) {
-        launch(args);
+        simulatiePanel.startSimulatieThread();
     }
 }
