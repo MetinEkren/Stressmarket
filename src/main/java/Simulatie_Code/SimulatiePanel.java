@@ -4,9 +4,13 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-
 import Simulatie_Code.Randomizer;
 
+
+/**
+ * Het tekenveld van de simulatie. Beheert de vaste-tijdstap update-loop,
+ * tekent de medewerker en houdt de FPS bij.
+ */
 public class SimulatiePanel extends Canvas {
     // Beeldinstellingen
     final int originalTileSize = 16;
@@ -18,10 +22,11 @@ public class SimulatiePanel extends Canvas {
     final int screenWidth = tileSize * maxScreenCol;        // 768
     final int screenHeight = tileSize * maxScreenRow;       // 576
 
-    // NPC
-    int npcX = 100;
-    int npcY = 100;
-    int npcSpeed = 4;  // pixels per update-stap
+    // De medewerker die door de simulatie beweegt
+    Medewerker medewerker = new Medewerker(100, 100, 4);
+    //    int npcX = 100;
+    //    int npcY = 100;
+    //    int npcSpeed = 4;  // pixels per update-stap
 
     private long lastTime = 0;
 
@@ -33,11 +38,31 @@ public class SimulatiePanel extends Canvas {
     private long lastFPSCheck = 0;
     private int frameCount = 0;
 
+
+    /**
+     * Constructor: stelt de canvasgrootte in en geeft de medewerker
+     * zijn route en gedrag mee.
+     */
     public SimulatiePanel() {
+
         this.setWidth(screenWidth);
         this.setHeight(screenHeight);
+
+        // Startpositie is 100, 100
+        // Hier voeg je de posities toe waar de medewerker naartoe moet
+        medewerker.addBestemming(400, 100);
+        medewerker.addBestemming(400, 300);
+        medewerker.addBestemming(100, 300);
+
+        //  Blijft de route oneindig herhalen als True niet dan False
+        medewerker.setLoopRoute(true);
     }
 
+    /**
+     * Start de animatielus. Gebruikt een accumulator zodat update()
+     * altijd met een vaste tijdstap van 1/60 seconde draait,
+     * ongeacht hoe vaak het scherm ververst (60Hz, 144Hz, ...).
+     */
     public void startSimulatieThread() {
 
         lastTime = System.nanoTime();
@@ -61,8 +86,10 @@ public class SimulatiePanel extends Canvas {
                 // Voer vaste updates uit zolang we genoeg tijd hebben
                 while (accumulator >= UPDATE_STEP) {
                     update();
+                    //medewerker.update(UPDATE_STEP); // geef de vaste tijdstap mee
                     accumulator -= UPDATE_STEP;
                 }
+
 
                 // Teken het scherm
                 draw();
@@ -80,16 +107,21 @@ public class SimulatiePanel extends Canvas {
         simulatieLoop.start();
     }
 
+    //Roept één simulatiedraai aan op de medewerker.
+    // Draait met een vaste tijdstap van UPDATE_STEP.
     public void update() {
-        npcX += npcSpeed;
-        if (npcX > screenWidth) {
-            npcX = -tileSize;
-        }
+        //npcX += npcSpeed;
+        //if (npcX > screenWidth) {
+        //npcX = -tileSize;
+        //}
+        medewerker.update(UPDATE_STEP);
 
         //test
         //Randomizer.getRandomNumber();
     }
 
+    //Tekent één frame: zwarte achtergrond + witte medewerker.
+    //Wordt elke keer aangeroepen als AnimationTimer een frame tekent.
     public void draw() {
 
         GraphicsContext gc = this.getGraphicsContext2D();
@@ -98,11 +130,13 @@ public class SimulatiePanel extends Canvas {
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, screenWidth, screenHeight);
 
-        // maak canvas transparant
+        // maak canvas transparant Werkt niet
         //gc.clearRect(0,0,screenWidth,screenHeight);
 
-        // Teken de NPC
+        // Teken de medewerker
         gc.setFill(Color.WHITE);
-        gc.fillRect(npcX, npcY, tileSize, tileSize);
+        gc.fillRect(medewerker.getIntX(), medewerker.getIntY(), tileSize, tileSize);
+
+        //gc.fillRect(npcX, npcY, tileSize, tileSize);
     }
 }
