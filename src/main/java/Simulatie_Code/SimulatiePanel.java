@@ -5,6 +5,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+import Simulatie_Code.Randomizer;
+
 public class SimulatiePanel extends Canvas {
     // Beeldinstellingen
     final int originalTileSize = 16;
@@ -83,6 +85,9 @@ public class SimulatiePanel extends Canvas {
         if (npcX > screenWidth) {
             npcX = -tileSize;
         }
+
+        //test
+        //Randomizer.getRandomNumber();
     }
 
     public void draw() {
