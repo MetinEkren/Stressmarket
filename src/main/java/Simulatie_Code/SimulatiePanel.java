@@ -5,6 +5,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import Simulatie_Code.Randomizer;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -15,7 +17,8 @@ public class SimulatiePanel extends Canvas {
     // Beeldinstellingen
     final int originalTileSize = 16;
     final int scale = 3;
-    final int tileSize = originalTileSize * scale;          // 48
+    //final int tileSize = originalTileSize;// 48
+    final int tileSize = originalTileSize * scale; // 48
 
     final int maxScreenCol = 16;
     final int maxScreenRow = 12;
@@ -24,6 +27,7 @@ public class SimulatiePanel extends Canvas {
 
     // De medewerker die door de simulatie beweegt
     Medewerker medewerker = new Medewerker(100, 100, 4);
+    Vrachtwagen vrachtwagen = new Vrachtwagen(10, 10, 4, List.of(new Positie(352, 10, 4), new Positie(800, 10)));
     //    int npcX = 100;
     //    int npcY = 100;
     //    int npcSpeed = 4;  // pixels per update-stap
@@ -56,6 +60,7 @@ public class SimulatiePanel extends Canvas {
 
         //  Blijft de route oneindig herhalen als True niet dan False
         medewerker.setLoopRoute(true);
+        vrachtwagen.setLoopRoute(false);
     }
 
     /**
@@ -115,6 +120,7 @@ public class SimulatiePanel extends Canvas {
         //npcX = -tileSize;
         //}
         medewerker.update(UPDATE_STEP);
+        vrachtwagen.update(UPDATE_STEP);
 
         //test
         //Randomizer.getRandomNumber();
@@ -135,7 +141,11 @@ public class SimulatiePanel extends Canvas {
 
         // Teken de medewerker
         gc.setFill(Color.WHITE);
-        gc.fillRect(medewerker.getIntX(), medewerker.getIntY(), tileSize, tileSize);
+        //gc.fillRect(medewerker.getIntX(), medewerker.getIntY(), tileSize, tileSize);
+        gc.fillRect(medewerker.getIntX(), medewerker.getIntY(), 32, 32);
+
+        gc.setFill(Color.BLUE);
+        gc.fillRect(vrachtwagen.getIntX(), vrachtwagen.getIntY(), 32, 32);
 
         //gc.fillRect(npcX, npcY, tileSize, tileSize);
     }
