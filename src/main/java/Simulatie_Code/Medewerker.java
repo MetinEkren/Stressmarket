@@ -77,11 +77,6 @@ public class Medewerker {
         route.add(positie);
     }
 
-    //Maakt de route leeg en zet de index terug op 0.
-    public void clearRoute() {
-        route.clear();
-        targetIndex = 0;
-    }
 
     //Zet de medewerker terug op zijn startpositie en laat hem
     public void reset() {
