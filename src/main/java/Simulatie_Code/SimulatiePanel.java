@@ -4,8 +4,6 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import Simulatie_Code.Randomizer;
-
 
 /**
  * Het tekenveld van de simulatie. Beheert de vaste-tijdstap update-loop,
