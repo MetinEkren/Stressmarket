@@ -124,7 +124,11 @@ public class SimulatiePanel extends Canvas {
     //Wordt elke keer aangeroepen als AnimationTimer een frame tekent.
     public void draw() {
 
+        Schap sodaSchap = new Schap(50,50,250,75,16, "Soda");
+        Schap jamSchap = new Schap(350, 50, 250, 75, 16, "Jam");
+        Schap milkSchap = new Schap(50, 350, 250, 75, 16, "Milk");
         GraphicsContext gc = this.getGraphicsContext2D();
+        GraphicsContext gc2 = this.getGraphicsContext2D();
 
         // Wis de canvas en maak hem zwart
         gc.setFill(Color.BLACK);
@@ -137,6 +141,31 @@ public class SimulatiePanel extends Canvas {
         gc.setFill(Color.WHITE);
         gc.fillRect(medewerker.getIntX(), medewerker.getIntY(), tileSize, tileSize);
 
-        //gc.fillRect(npcX, npcY, tileSize, tileSize);
+
+
+        //Teken de schap
+        gc.fillRect(sodaSchap.posX, sodaSchap.posY, sodaSchap.schapWidth, sodaSchap.schapHeight);
+        for (Product product : sodaSchap.productList)
+        {
+            gc.setFill(Color.ORANGE);
+            gc.fillRect(product.posX, product.posY, product.productWidth, product.productHeight);
+        }
+
+
+        gc.setFill(Color.WHITE);
+        gc.fillRect(jamSchap.posX, jamSchap.posY, jamSchap.schapWidth, jamSchap.schapHeight);
+        for (Product product2: jamSchap.productList)
+        {
+            gc2.setFill(Color.RED);
+            gc2.fillRect(product2.posX, product2.posY, product2.productWidth, product2.productHeight);
+        }
+
+        gc.setFill(Color.WHITE);
+        gc.fillRect(milkSchap.posX, milkSchap.posY, milkSchap.schapWidth, milkSchap.schapHeight);
+        for (Product product3: milkSchap.productList)
+        {
+            gc2.setFill(Color.BLUE);
+            gc2.fillRect(product3.posX, product3.posY, product3.productWidth, product3.productHeight);
+        }
     }
 }
