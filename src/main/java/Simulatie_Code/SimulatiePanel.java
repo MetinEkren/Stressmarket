@@ -63,6 +63,7 @@ public class SimulatiePanel extends Canvas {
     public void MaakNpc() {
 
         Klant.MaakKlant(npcBewegings);
+        Kassiere.MaakKassiere(npcBewegings);
         Vrachtwagen.maakVrachtwagen(npcBewegings);
     }
 
@@ -160,13 +161,16 @@ public class SimulatiePanel extends Canvas {
 
 
         for (NpcBeweging b : npcBewegings) {
-            if (b instanceof Medewerker) {
+            if (b instanceof Kassiere) {
                 gc.setFill(Color.WHITE);
             } else if (b instanceof Vrachtwagen) {
                 gc.setFill(Color.BLUE);
             } else if (b instanceof Klant) {
                 gc.setFill(Color.RED);
             }
+            //else if (b instanceof Kassiere) {
+            //    gc.setFill(Color.GREEN);
+            //}
             gc.fillRect(b.getIntX(), b.getIntY(), 32, 32);
         }
     }
