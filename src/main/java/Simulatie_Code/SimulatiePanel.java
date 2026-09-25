@@ -135,9 +135,6 @@ public class SimulatiePanel extends Canvas {
     // Draait met een vaste tijdstap van UPDATE_STEP.
     public void update() {
 
-//        medewerker.update(UPDATE_STEP);
-//        vrachtwagen.update(UPDATE_STEP);
-
         for (NpcBeweging b : npcBewegings) {
             b.update(UPDATE_STEP);
         }
@@ -168,9 +165,7 @@ public class SimulatiePanel extends Canvas {
             } else if (b instanceof Klant) {
                 gc.setFill(Color.RED);
             }
-            //else if (b instanceof Kassiere) {
-            //    gc.setFill(Color.GREEN);
-            //}
+
             gc.fillRect(b.getIntX(), b.getIntY(), 32, 32);
         }
     }
