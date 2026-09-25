@@ -4,7 +4,7 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-
+import Simulatie_Code.Randomizer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +30,11 @@ public class SimulatiePanel extends Canvas {
 
     private final List<NpcBeweging> npcBewegings = new ArrayList<>();
 
+    Vakkenvuller vakkenvuller = new Vakkenvuller(100, 200, 5);
+    Schap sodaSchap = new Schap(50,50,250,75,15, "Soda");
+    Schap jamSchap = new Schap(350, 50, 250, 75, 16, "Jam");
+    Schap melkSchap = new Schap(50, 350, 250, 75, 16, "Milk");
+    Schap vleesSchap = new Schap(350, 350, 250, 75, 0, "Vlees");
     private long lastTime = 0;
 
     // Vaste tijdsstap (60 updates per seconde)
@@ -98,11 +103,14 @@ public class SimulatiePanel extends Canvas {
 
                 // Voer vaste updates uit zolang we genoeg tijd hebben
                 while (accumulator >= UPDATE_STEP) {
-                    update();
+                    try {
+                        update();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                     //medewerker.update(UPDATE_STEP); // geef de vaste tijdstap mee
                     accumulator -= UPDATE_STEP;
                 }
-
 
                 // Teken het scherm
                 draw();
@@ -133,7 +141,7 @@ public class SimulatiePanel extends Canvas {
 
     //Roept één simulatiedraai aan op de medewerker.
     // Draait met een vaste tijdstap van UPDATE_STEP.
-    public void update() {
+    public void update() throws InterruptedException{
 
         for (NpcBeweging b : npcBewegings) {
             b.update(UPDATE_STEP);
@@ -151,6 +159,8 @@ public class SimulatiePanel extends Canvas {
     public void draw() {
 
         GraphicsContext gc = this.getGraphicsContext2D();
+        GraphicsContext gc2 = this.getGraphicsContext2D();
+        GraphicsContext gc3 = this.getGraphicsContext2D();
 
         // Wis de canvas en maak hem zwart
         gc.setFill(Color.BLACK);
@@ -168,5 +178,43 @@ public class SimulatiePanel extends Canvas {
 
             gc.fillRect(b.getIntX(), b.getIntY(), 32, 32);
         }
+
+        //Teken de schap
+        gc.fillRect(sodaSchap.posX, sodaSchap.posY, sodaSchap.schapWidth, sodaSchap.schapHeight);
+        for (Product product : sodaSchap.productList)
+        {
+            gc.setFill(Color.ORANGE);
+            gc.fillRect(product.posX, product.posY, product.productWidth, product.productHeight);
+        }
+
+
+        gc.setFill(Color.WHITE);
+        gc.fillRect(jamSchap.posX, jamSchap.posY, jamSchap.schapWidth, jamSchap.schapHeight);
+        for (Product product2: jamSchap.productList)
+        {
+            gc2.setFill(Color.RED);
+            gc2.fillRect(product2.posX, product2.posY, product2.productWidth, product2.productHeight);
+        }
+
+        gc.setFill(Color.WHITE);
+        gc.fillRect(melkSchap.posX, melkSchap.posY, melkSchap.schapWidth, melkSchap.schapHeight);
+        for (Product product3: melkSchap.productList)
+        {
+            gc2.setFill(Color.BLUE);
+            gc2.fillRect(product3.posX, product3.posY, product3.productWidth, product3.productHeight);
+        }
+
+        gc.setFill(Color.WHITE);
+        gc.fillRect(vleesSchap.posX, vleesSchap.posY, vleesSchap.schapWidth, vleesSchap.schapHeight);
+        for (Product product3: vleesSchap.productList)
+        {
+            gc2.setFill(Color.PINK);
+            gc2.fillRect(product3.posX, product3.posY, product3.productWidth, product3.productHeight);
+        }
+
+        //teken de vakkenvuller
+        gc3.setFill(Color.GOLD);
+        gc3.fillRect(vakkenvuller.getIntX(), vakkenvuller.getIntY(), tileSize, tileSize);
+
     }
 }

@@ -10,6 +10,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         SimulatiePanel simulatiePanel = new SimulatiePanel();
+        simulatiePanel.draw();
 
         StackPane root = new StackPane();
         root.getChildren().add(simulatiePanel);

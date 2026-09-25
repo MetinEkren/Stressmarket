@@ -2,6 +2,9 @@ module Simulatie_Code {
     requires javafx.graphics;
     requires javafx.controls;
     requires javafx.fxml;
+    requires com.fasterxml.jackson.databind;
+    requires java.desktop;
+    requires org.json;
 //    requires javafx.web;
 //
 //    requires jdk.jsobject;
