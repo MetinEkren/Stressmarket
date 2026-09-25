@@ -148,10 +148,9 @@ public class Medewerker {
     }
 
     //Geeft de exacte (double) x van de huidige positie terug.
-    public double getX() {
+    protected double getX() {
         return x;
     }
-
     //Geeft de exacte (double) y van de huidige positie terug.
     public double getY() {
         return y;

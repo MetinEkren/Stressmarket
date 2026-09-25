@@ -22,6 +22,11 @@ public class SimulatiePanel extends Canvas {
 
     // De medewerker die door de simulatie beweegt
     Medewerker medewerker = new Medewerker(100, 100, 4);
+    Vakkenvuller vakkenvuller = new Vakkenvuller(100, 200, 5);
+    Schap sodaSchap = new Schap(50,50,250,75,15, "Soda");
+    Schap jamSchap = new Schap(350, 50, 250, 75, 16, "Jam");
+    Schap melkSchap = new Schap(50, 350, 250, 75, 16, "Milk");
+    Schap vleesSchap = new Schap(350, 350, 250, 75, 0, "Vlees");
     //    int npcX = 100;
     //    int npcY = 100;
     //    int npcSpeed = 4;  // pixels per update-stap
@@ -51,9 +56,12 @@ public class SimulatiePanel extends Canvas {
         medewerker.addBestemming(400, 100);
         medewerker.addBestemming(400, 300);
         medewerker.addBestemming(100, 300);
+        vakkenvuller.addBestemming(450, 200);
+        vakkenvuller.addBestemming(450,300);
 
         //  Blijft de route oneindig herhalen als True niet dan False
         medewerker.setLoopRoute(true);
+        vakkenvuller.setLoopRoute(false);
     }
 
     /**
@@ -83,11 +91,14 @@ public class SimulatiePanel extends Canvas {
 
                 // Voer vaste updates uit zolang we genoeg tijd hebben
                 while (accumulator >= UPDATE_STEP) {
-                    update();
+                    try {
+                        update();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                     //medewerker.update(UPDATE_STEP); // geef de vaste tijdstap mee
                     accumulator -= UPDATE_STEP;
                 }
-
 
                 // Teken het scherm
                 draw();
@@ -107,13 +118,14 @@ public class SimulatiePanel extends Canvas {
 
     //Roept één simulatiedraai aan op de medewerker.
     // Draait met een vaste tijdstap van UPDATE_STEP.
-    public void update() {
+    public void update() throws InterruptedException {
         //npcX += npcSpeed;
         //if (npcX > screenWidth) {
         //npcX = -tileSize;
         //}
         medewerker.update(UPDATE_STEP);
-
+        vakkenvuller.update(UPDATE_STEP);
+        vakkenvuller.checkSchap(vleesSchap);
         //test
         //Randomizer.getRandomNumber();
     }
@@ -121,12 +133,9 @@ public class SimulatiePanel extends Canvas {
     //Tekent één frame: zwarte achtergrond + witte medewerker.
     //Wordt elke keer aangeroepen als AnimationTimer een frame tekent.
     public void draw() {
-
-        Schap sodaSchap = new Schap(50,50,250,75,16, "Soda");
-        Schap jamSchap = new Schap(350, 50, 250, 75, 16, "Jam");
-        Schap milkSchap = new Schap(50, 350, 250, 75, 16, "Milk");
         GraphicsContext gc = this.getGraphicsContext2D();
         GraphicsContext gc2 = this.getGraphicsContext2D();
+        GraphicsContext gc3 = this.getGraphicsContext2D();
 
         // Wis de canvas en maak hem zwart
         gc.setFill(Color.BLACK);
@@ -138,8 +147,6 @@ public class SimulatiePanel extends Canvas {
         // Teken de medewerker
         gc.setFill(Color.WHITE);
         gc.fillRect(medewerker.getIntX(), medewerker.getIntY(), tileSize, tileSize);
-
-
 
         //Teken de schap
         gc.fillRect(sodaSchap.posX, sodaSchap.posY, sodaSchap.schapWidth, sodaSchap.schapHeight);
@@ -159,11 +166,24 @@ public class SimulatiePanel extends Canvas {
         }
 
         gc.setFill(Color.WHITE);
-        gc.fillRect(milkSchap.posX, milkSchap.posY, milkSchap.schapWidth, milkSchap.schapHeight);
-        for (Product product3: milkSchap.productList)
+        gc.fillRect(melkSchap.posX, melkSchap.posY, melkSchap.schapWidth, melkSchap.schapHeight);
+        for (Product product3: melkSchap.productList)
         {
             gc2.setFill(Color.BLUE);
             gc2.fillRect(product3.posX, product3.posY, product3.productWidth, product3.productHeight);
         }
+
+        gc.setFill(Color.WHITE);
+        gc.fillRect(vleesSchap.posX, vleesSchap.posY, vleesSchap.schapWidth, vleesSchap.schapHeight);
+        for (Product product3: vleesSchap.productList)
+        {
+            gc2.setFill(Color.PINK);
+            gc2.fillRect(product3.posX, product3.posY, product3.productWidth, product3.productHeight);
+        }
+
+        //teken de vakkenvuller
+        gc3.setFill(Color.GOLD);
+        gc3.fillRect(vakkenvuller.getIntX(), vakkenvuller.getIntY(), tileSize, tileSize);
+
     }
 }
