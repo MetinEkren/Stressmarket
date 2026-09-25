@@ -12,14 +12,14 @@ public class Positie {
     public final double wachttijd;   // seconden wachten bij aankomst
 
     //Maakt een positie zonder wachttijd (wachttijd = 0).
-    public Positie(int x, int y) {
+    protected Positie(int x, int y) {
         //this.x = x;
         //this.y = y;
         this(x, y, 0);
     }
 
     // Maakt een positie met een specifieke wachttijd.
-    public Positie(int x, int y, double wachttijd) {
+    protected Positie(int x, int y, double wachttijd) {
         this.x = x;
         this.y = y;
         this.wachttijd = wachttijd;
