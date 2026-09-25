@@ -15,4 +15,10 @@ public class Randomizer {
 
         return randomNumber;
     }
+
+    public void getRandomProduct(){
+
+        int hoeVeel = getRandomNumber();
+    }
+
 }
