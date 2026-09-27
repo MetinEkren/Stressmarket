@@ -11,9 +11,10 @@ public class Schap {
     protected double posY;
     protected String schapType;
     protected int amountOfProducts;
+    protected int productCapacity;
     protected List<Product> productList;
 
-    protected Schap(double posX, double posY, int schapWidth, int schapHeight, int amountOfProducts, String schapType)
+    protected Schap(double posX, double posY, int schapWidth, int schapHeight, int amountOfProducts, int productCapacity, String schapType)
     {
         this.posX = posX;
         this.posY = posY;
@@ -21,6 +22,7 @@ public class Schap {
         this.schapHeight = schapHeight;
         this.schapType = schapType;
         this.amountOfProducts = amountOfProducts;
+        this.productCapacity = productCapacity;
         productList = new ArrayList<>();
         posY += 15;
         for (int i = 1; i <= amountOfProducts; i++)
@@ -33,7 +35,20 @@ public class Schap {
                     schapWidth / 15,
                     schapHeight / 5,
                     schapType,
-                    1, i));
+                    i));
         }
     }
+
+    protected double getIntX()
+    {
+        return posX;
+    }
+
+    protected double getIntY()
+    {
+        return posY;
+    }
+
+    public Positie getCurrentPositie() { return new Positie((int)getIntX(), (int) getIntY()); }
+
 }

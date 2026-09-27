@@ -15,6 +15,7 @@ import java.util.List;
  */
 public class SimulatiePanel extends Canvas {
     // Beeldinstellingen
+    protected List<Schap> bestemmingen;
     final int originalTileSize = 16;
     final int scale = 3;
     //final int tileSize = originalTileSize;// 48
@@ -28,13 +29,11 @@ public class SimulatiePanel extends Canvas {
     //private Medewerker medewerker;
     //private Vrachtwagen vrachtwagen;
 
-    private final List<NpcBeweging> npcBewegings = new ArrayList<>();
-
-    Vakkenvuller vakkenvuller = new Vakkenvuller(100, 200, 5);
-    Schap sodaSchap = new Schap(50,50,250,75,15, "Soda");
-    Schap jamSchap = new Schap(350, 50, 250, 75, 16, "Jam");
-    Schap melkSchap = new Schap(50, 350, 250, 75, 16, "Milk");
-    Schap vleesSchap = new Schap(350, 350, 250, 75, 0, "Vlees");
+    private final List<NpcBeweging> npcBewegingen = new ArrayList<>();
+    Schap sodaSchap = new Schap(50,50,250,75,15, 16,"Soda");
+    Schap jamSchap = new Schap(350, 50, 250, 75, 16, 16, "Jam");
+    Schap melkSchap = new Schap(50, 350, 250, 75, 16, 16, "Milk");
+    Schap vleesSchap = new Schap(350, 350, 250, 75, 0, 16,"Vlees");
     private long lastTime = 0;
 
     // Vaste tijdsstap (60 updates per seconde)
@@ -61,15 +60,21 @@ public class SimulatiePanel extends Canvas {
         MaakNpc();
 
         // Daarna elke 5 seconden een nieuwe klant
-        spawnTimer = new SpawnTimer(5.0, () -> Klant.MaakKlant(npcBewegings));//() -> MaakNpc()//this::MaakNpc
+        spawnTimer = new SpawnTimer(5.0, () -> Klant.MaakKlant(npcBewegingen));//() -> MaakNpc()//this::MaakNpc
         spawnTimer.start();
     }
 
     public void MaakNpc() {
 
-        Klant.MaakKlant(npcBewegings);
-        Kassiere.MaakKassiere(npcBewegings);
-        Vrachtwagen.maakVrachtwagen(npcBewegings);
+        bestemmingen = new ArrayList<>();
+        bestemmingen.add(sodaSchap);
+        bestemmingen.add(jamSchap);
+        bestemmingen.add(melkSchap);
+        bestemmingen.add(vleesSchap);
+        Vakkenvuller.MaakVakkenvuller(npcBewegingen, bestemmingen);
+        Klant.MaakKlant(npcBewegingen);
+        Kassiere.MaakKassiere(npcBewegingen);
+        Vrachtwagen.maakVrachtwagen(npcBewegingen);
     }
 
     /**
@@ -143,14 +148,19 @@ public class SimulatiePanel extends Canvas {
     // Draait met een vaste tijdstap van UPDATE_STEP.
     public void update() throws InterruptedException{
 
-        for (NpcBeweging b : npcBewegings) {
+        for (NpcBeweging b : npcBewegingen) {
             b.update(UPDATE_STEP);
+            if (b instanceof Vakkenvuller) {
+                for (Schap bestemming : bestemmingen) {
+                    Vakkenvuller.checkSchap(bestemming);
+                }
+            }
         }
 
         // 2. Verwijder alle bewegers die klaar zijn
-        npcBewegings.removeIf(b -> b.isRouteFinished() && !b.isLoopRoute());
+        npcBewegingen.removeIf(b -> b.isRouteFinished() && !b.isLoopRoute());
 
-        //test
+        //test functie
         //Randomizer.getRandomNumber();
     }
 
@@ -159,15 +169,13 @@ public class SimulatiePanel extends Canvas {
     public void draw() {
 
         GraphicsContext gc = this.getGraphicsContext2D();
-        GraphicsContext gc2 = this.getGraphicsContext2D();
-        GraphicsContext gc3 = this.getGraphicsContext2D();
 
         // Wis de canvas en maak hem zwart
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, screenWidth, screenHeight);
 
 
-        for (NpcBeweging b : npcBewegings) {
+        for (NpcBeweging b : npcBewegingen) {
             if (b instanceof Kassiere) {
                 gc.setFill(Color.WHITE);
             } else if (b instanceof Vrachtwagen) {
@@ -175,11 +183,15 @@ public class SimulatiePanel extends Canvas {
             } else if (b instanceof Klant) {
                 gc.setFill(Color.RED);
             }
+            else if(b instanceof Vakkenvuller){
+                gc.setFill(Color.GOLD);
+            }
 
             gc.fillRect(b.getIntX(), b.getIntY(), 32, 32);
         }
 
         //Teken de schap
+        gc.setFill(Color.WHITE);
         gc.fillRect(sodaSchap.posX, sodaSchap.posY, sodaSchap.schapWidth, sodaSchap.schapHeight);
         for (Product product : sodaSchap.productList)
         {
@@ -192,29 +204,29 @@ public class SimulatiePanel extends Canvas {
         gc.fillRect(jamSchap.posX, jamSchap.posY, jamSchap.schapWidth, jamSchap.schapHeight);
         for (Product product2: jamSchap.productList)
         {
-            gc2.setFill(Color.RED);
-            gc2.fillRect(product2.posX, product2.posY, product2.productWidth, product2.productHeight);
+            gc.setFill(Color.RED);
+            gc.fillRect(product2.posX, product2.posY, product2.productWidth, product2.productHeight);
         }
 
         gc.setFill(Color.WHITE);
         gc.fillRect(melkSchap.posX, melkSchap.posY, melkSchap.schapWidth, melkSchap.schapHeight);
         for (Product product3: melkSchap.productList)
         {
-            gc2.setFill(Color.BLUE);
-            gc2.fillRect(product3.posX, product3.posY, product3.productWidth, product3.productHeight);
+            gc.setFill(Color.BLUE);
+            gc.fillRect(product3.posX, product3.posY, product3.productWidth, product3.productHeight);
         }
 
         gc.setFill(Color.WHITE);
         gc.fillRect(vleesSchap.posX, vleesSchap.posY, vleesSchap.schapWidth, vleesSchap.schapHeight);
         for (Product product3: vleesSchap.productList)
         {
-            gc2.setFill(Color.PINK);
-            gc2.fillRect(product3.posX, product3.posY, product3.productWidth, product3.productHeight);
+            gc.setFill(Color.PINK);
+            gc.fillRect(product3.posX, product3.posY, product3.productWidth, product3.productHeight);
         }
 
-        //teken de vakkenvuller
-        gc3.setFill(Color.GOLD);
-        gc3.fillRect(vakkenvuller.getIntX(), vakkenvuller.getIntY(), tileSize, tileSize);
+//        //teken de vakkenvuller
+//        gc.setFill(Color.GOLD);
+//        gc.fillRect(vakkenvuller.getIntX(), vakkenvuller.getIntY(), tileSize, tileSize);
 
     }
 }

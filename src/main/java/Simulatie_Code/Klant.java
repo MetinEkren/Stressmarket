@@ -16,7 +16,7 @@ public class Klant extends NpcBeweging {
         super(startX, startY, speed, route);
     }
 
-    public static void MaakKlant(List<NpcBeweging> npcBewegings) {
+    public static void MaakKlant(List<NpcBeweging> npcBewegingen) {
 
         Klant klant = new Klant(100, 100, 4);
 
@@ -27,6 +27,6 @@ public class Klant extends NpcBeweging {
         klant.addBestemming(200, 300);
 
         klant.setLoopRoute(false);
-        npcBewegings.add(klant);
+        npcBewegingen.add(klant);
     }
 }

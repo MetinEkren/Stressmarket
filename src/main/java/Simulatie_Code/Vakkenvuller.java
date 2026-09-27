@@ -1,6 +1,7 @@
 package Simulatie_Code;
 
 import java.lang.constant.Constable;
+import java.util.List;
 
 public class Vakkenvuller extends Medewerker{
     public Vakkenvuller(int startX, int startY, double speed)
@@ -8,21 +9,30 @@ public class Vakkenvuller extends Medewerker{
         super(startX, startY, speed);
     }
 
-    protected void checkSchap(Schap schap)
+    public static void checkSchap(Schap schap)
     {
-        if (schap.posY - getY() <= 50){
             int i = 1;
             do {
-                schap.posX = this.getX();
-                schap.posY = this.getX() ;
                 schap.productList.add(new Product( schap.productList.get(i).posX, schap.posY,
                         schap.schapWidth / 15,
                         schap.schapHeight / 5,
                         schap.schapType,
-                        i, i));
+                        i));
                 i++;
             }
-            while (schap.productList.size() < 16);
-        }
+            while (schap.productList.size() < schap.productCapacity);
     }
+
+    protected static void MaakVakkenvuller(List<NpcBeweging> NpcBewegingen, List<Schap> bestemmingen){
+        Vakkenvuller vakkenvuller = new Vakkenvuller(100, 200, 5);
+        vakkenvuller.addBestemming(450, 200);
+        vakkenvuller.addBestemming(450, 300);
+        vakkenvuller.addBestemming(100, 300);
+        vakkenvuller.addBestemming(100,200);
+
+        vakkenvuller.setLoopRoute(true);
+        NpcBewegingen.add(vakkenvuller);
+    }
+
+
 }
