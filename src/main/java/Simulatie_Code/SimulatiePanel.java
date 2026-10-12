@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class SimulatiePanel extends Canvas {
     // Beeldinstellingen
-    protected List<Schap> bestemmingen;
+    protected List<Schap> schappen;
     final int originalTileSize = 16;
     final int scale = 3;
     //final int tileSize = originalTileSize;// 48
@@ -30,10 +30,12 @@ public class SimulatiePanel extends Canvas {
     //private Vrachtwagen vrachtwagen;
 
     private final List<NpcBeweging> npcBewegingen = new ArrayList<>();
-    Schap sodaSchap = new Schap(50,50,250,75,15, 16,"Soda");
-    Schap jamSchap = new Schap(350, 50, 250, 75, 16, 16, "Jam");
-    Schap melkSchap = new Schap(50, 350, 250, 75, 16, 16, "Milk");
-    Schap vleesSchap = new Schap(350, 350, 250, 75, 0, 16,"Vlees");
+
+//    Schap sodaSchap = new Schap(50,50,250,75,15, 16,"Soda");
+//    Schap jamSchap = new Schap(350, 50, 250, 75, 16, 16, "Jam");
+//    Schap melkSchap = new Schap(50, 350, 250, 75, 16, 16, "Milk");
+//    Schap vleesSchap = new Schap(350, 350, 250, 75, 0, 16,"Vlees");
+
     private long lastTime = 0;
 
     // Vaste tijdsstap (60 updates per seconde)
@@ -66,12 +68,14 @@ public class SimulatiePanel extends Canvas {
 
     public void MaakNpc() {
 
-        bestemmingen = new ArrayList<>();
-        bestemmingen.add(sodaSchap);
-        bestemmingen.add(jamSchap);
-        bestemmingen.add(melkSchap);
-        bestemmingen.add(vleesSchap);
-        Vakkenvuller.MaakVakkenvuller(npcBewegingen, bestemmingen);
+//        bestemmingen = new ArrayList<>();
+//        bestemmingen.add(sodaSchap);
+//        bestemmingen.add(jamSchap);
+//        bestemmingen.add(melkSchap);
+//        bestemmingen.add(vleesSchap);
+
+        schappen = Schap.MaakSchap();
+        Vakkenvuller.MaakVakkenvuller(npcBewegingen, schappen);
         Klant.MaakKlant(npcBewegingen);
         Kassiere.MaakKassiere(npcBewegingen);
         Vrachtwagen.maakVrachtwagen(npcBewegingen);
@@ -151,8 +155,8 @@ public class SimulatiePanel extends Canvas {
         for (NpcBeweging b : npcBewegingen) {
             b.update(UPDATE_STEP);
             if (b instanceof Vakkenvuller) {
-                for (Schap bestemming : bestemmingen) {
-                    Vakkenvuller.checkSchap(bestemming);
+                for (Schap schap : schappen) {
+                    Vakkenvuller.checkSchap(schap);
                 }
             }
         }
@@ -190,43 +194,35 @@ public class SimulatiePanel extends Canvas {
             gc.fillRect(b.getIntX(), b.getIntY(), 32, 32);
         }
 
-        //Teken de schap
-        gc.setFill(Color.WHITE);
-        gc.fillRect(sodaSchap.posX, sodaSchap.posY, sodaSchap.schapWidth, sodaSchap.schapHeight);
-        for (Product product : sodaSchap.productList)
-        {
-            gc.setFill(Color.ORANGE);
-            gc.fillRect(product.posX, product.posY, product.productWidth, product.productHeight);
+        // Teken alle schappen
+        for (Schap schap : schappen) {
+            // Teken het schap zelf
+            gc.setFill(Color.WHITE);
+            gc.fillRect(schap.posX, schap.posY, schap.schapWidth, schap.schapHeight);
+
+            // Bepaal de kleur van de producten op basis van het schapType
+            Color productKleur = getProductKleur(schap.schapType);
+            gc.setFill(productKleur);
+
+            // Teken alle producten in dit schap
+            for (Product product : schap.productList) {
+                gc.fillRect(product.posX, product.posY, product.productWidth, product.productHeight);
+            }
         }
+    }
 
-
-        gc.setFill(Color.WHITE);
-        gc.fillRect(jamSchap.posX, jamSchap.posY, jamSchap.schapWidth, jamSchap.schapHeight);
-        for (Product product2: jamSchap.productList)
-        {
-            gc.setFill(Color.RED);
-            gc.fillRect(product2.posX, product2.posY, product2.productWidth, product2.productHeight);
+    private Color getProductKleur(String schapType) {
+        switch (schapType) {
+            case "Soda":
+                return Color.ORANGE;
+            case "Jam":
+                return Color.RED;
+            case "Milk":
+                return Color.BLUE;
+            case "Vlees":
+                return Color.PINK;
+            default:
+                return Color.GRAY;
         }
-
-        gc.setFill(Color.WHITE);
-        gc.fillRect(melkSchap.posX, melkSchap.posY, melkSchap.schapWidth, melkSchap.schapHeight);
-        for (Product product3: melkSchap.productList)
-        {
-            gc.setFill(Color.BLUE);
-            gc.fillRect(product3.posX, product3.posY, product3.productWidth, product3.productHeight);
-        }
-
-        gc.setFill(Color.WHITE);
-        gc.fillRect(vleesSchap.posX, vleesSchap.posY, vleesSchap.schapWidth, vleesSchap.schapHeight);
-        for (Product product3: vleesSchap.productList)
-        {
-            gc.setFill(Color.PINK);
-            gc.fillRect(product3.posX, product3.posY, product3.productWidth, product3.productHeight);
-        }
-
-//        //teken de vakkenvuller
-//        gc.setFill(Color.GOLD);
-//        gc.fillRect(vakkenvuller.getIntX(), vakkenvuller.getIntY(), tileSize, tileSize);
-
     }
 }
