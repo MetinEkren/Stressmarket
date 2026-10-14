@@ -23,6 +23,7 @@ public class Klant extends NpcBeweging {
         klant.setLoopRoute(false);
         npcBewegingen.add(klant);
 
+        //Boodschappen lijst
         List<Randomizer.Boodschap> lijst = Randomizer.getRandomShoppinglist();
         for (Randomizer.Boodschap b : lijst) {
             System.out.println(b.aantal + "x " + b.product.productType);
