@@ -70,11 +70,6 @@ public abstract class NpcBeweging {
         this.standaardWachttijd = seconden;
     }
 
-    public void reset() {
-        x = startX;
-        y = startY;
-        targetIndex = 0;
-    }
 
     /**
      * Eén simulatiedraai. Wordt 60x per seconde aangeroepen met dt = 1/60.

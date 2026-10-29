@@ -20,6 +20,12 @@ public class Klant extends NpcBeweging {
 
         Klant klant = new Klant(100, 100, 4);
 
+        klant.addBestemming(400, 100);
+        klant.addBestemming(400, 200);
+        klant.addBestemming(400, 300);
+        klant.addBestemming(400, 400);
+        klant.addBestemming(200, 300);
+
         klant.setLoopRoute(false);
         npcBewegingen.add(klant);
 
