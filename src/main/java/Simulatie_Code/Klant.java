@@ -18,9 +18,9 @@ public class Klant extends NpcBeweging {
 
     public static void MaakKlant(List<NpcBeweging> npcBewegingen) {
 
-        Klant klant = new Klant(100, 100, 4);
+        Klant klant = new Klant(100, 150, 4);
 
-        klant.addBestemming(400, 100);
+        klant.addBestemming(400, 150);
         klant.addBestemming(400, 200);
         klant.addBestemming(400, 300);
         klant.addBestemming(400, 400);
