@@ -17,7 +17,7 @@ public class Main extends Application {
 
         Scene scene = new Scene(root, simulatiePanel.screenWidth, simulatiePanel.screenHeight);
 
-        primaryStage.setTitle("Market Simulatie");
+        primaryStage.setTitle("Market simulatie");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.centerOnScreen();

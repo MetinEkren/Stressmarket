@@ -31,10 +31,10 @@ public class SimulatiePanel extends Canvas {
 
     private final List<NpcBeweging> npcBewegingen = new ArrayList<>();
 
-//    Schap sodaSchap = new Schap(50,50,250,75,15, 16,"Soda");
-//    Schap jamSchap = new Schap(350, 50, 250, 75, 16, 16, "Jam");
-//    Schap melkSchap = new Schap(50, 350, 250, 75, 16, 16, "Milk");
-//    Schap vleesSchap = new Schap(350, 350, 250, 75, 0, 16,"Vlees");
+    Schap sodaSchap = new Schap(50,50,250,75,15, 16,"Soda");
+    Schap jamSchap = new Schap(350, 50, 250, 75, 16, 16, "Jam");
+    Schap melkSchap = new Schap(50, 350, 250, 75, 16, 16, "Milk");
+    Schap vleesSchap = new Schap(350, 350, 250, 75, 7, 16,"Vlees");
 
     private long lastTime = 0;
 
@@ -64,11 +64,11 @@ public class SimulatiePanel extends Canvas {
 
     public void MaakNpc() {
 
-//        bestemmingen = new ArrayList<>();
-//        bestemmingen.add(sodaSchap);
-//        bestemmingen.add(jamSchap);
-//        bestemmingen.add(melkSchap);
-//        bestemmingen.add(vleesSchap);
+    //  bestemmingen = new ArrayList<>();
+    //  bestemmingen.add(sodaSchap);
+    //  bestemmingen.add(jamSchap);
+    //  bestemmingen.add(melkSchap);
+    //  bestemmingen.add(vleesSchap);
 
         schappen = Schap.MaakSchap();
         Vakkenvuller.MaakVakkenvuller(npcBewegingen, schappen);
@@ -78,7 +78,7 @@ public class SimulatiePanel extends Canvas {
     }
 
     /**
-     * Start de animatielus. Gebruikt een accumulator zodat update()
+     * Start de animatie lus. Gebruikt een accumulator zodat update()
      * altijd met een vaste tijdstap van 1/60 seconde draait,
      * ongeacht hoe vaak het scherm ververst (60Hz, 144Hz, ...).
      */
@@ -88,6 +88,13 @@ public class SimulatiePanel extends Canvas {
         lastFPSCheck = lastTime;
         accumulator = 0.0;
         frameCount = 0;
+
+        // Bereken verstreken tijd in seconden
+        // Accumuleer tijd
+        // Voer vaste updates uit zolang we genoeg tijd hebben
+        // Teken het scherm
+        // FPS-teller
+        // simulatie loop
 
         simulatieLoop = new AnimationTimer() {
             @Override
@@ -139,15 +146,35 @@ public class SimulatiePanel extends Canvas {
         }
     }
 
-    //Roept één simulatiedraai aan op de medewerker.
+    //Roept één simulatie draai aan op de medewerker.
     // Draait met een vaste tijdstap van UPDATE_STEP.
     public void update() throws InterruptedException{
-
         for (NpcBeweging b : npcBewegingen) {
             b.update(UPDATE_STEP);
             if (b instanceof Vakkenvuller) {
-                for (Schap schap : schappen) {
-                    Vakkenvuller.checkSchap(schap);
+
+                // for (Schap schap : schappen) {
+                //     Vakkenvuller.checkSchap(schap);
+
+                for (Schap bestemming : bestemmingen) {
+
+                    boolean overlapsTop =
+                            b.getIntX() < bestemming.posX + bestemming.schapWidth &&
+                                    b.getIntX() + 100 > bestemming.posX &&
+                                    b.getIntY() < bestemming.posY + bestemming.schapHeight &&
+                                    b.getIntY() + 100 > bestemming.posY;
+
+                    boolean overlapsBottom =
+                                    b.getIntX() - bestemming.schapWidth > bestemming.posX &&
+                                    b.getIntX() - 100 < bestemming.posX &&
+                                    b.getIntY() - bestemming.schapHeight > bestemming.posY &&
+                                    b.getIntY() - 100 < bestemming.posY;
+
+                    if (overlapsTop || overlapsBottom) {
+                        System.out.println("Bestemming & Type: " + bestemming.posX + ", " + bestemming.schapType);
+                        System.out.println("X: " + b.getX());
+                        Vakkenvuller.checkSchap(bestemming);
+                    }
                 }
             }
         }
@@ -160,10 +187,14 @@ public class SimulatiePanel extends Canvas {
     //Tekent één frame: zwarte achtergrond + witte medewerker.
     //Wordt elke keer aangeroepen als AnimationTimer een frame tekent.
     public void draw() {
+//        for (Schap schap : bestemmingen)
+//        {
+//            schap.fillShelf(schap);
+//        }
 
         GraphicsContext gc = this.getGraphicsContext2D();
 
-        // Wis de canvas en maak hem zwart
+        // Wis het canvas en maak hem zwart
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, screenWidth, screenHeight);
 
@@ -213,5 +244,25 @@ public class SimulatiePanel extends Canvas {
             default:
                 return Color.GRAY;
         }
+
+        // gc.setFill(Color.WHITE);
+        // gc.fillRect(melkSchap.posX, melkSchap.posY, melkSchap.schapWidth, melkSchap.schapHeight);
+        // for (Product product3: melkSchap.productList)
+        // {
+        //     gc.setFill(Color.BLUE);
+        //     gc.fillRect(product3.posX, product3.posY, product3.productWidth, product3.productHeight);
+        // }
+
+        // gc.setFill(Color.WHITE);
+        // gc.fillRect(vleesSchap.posX, vleesSchap.posY, vleesSchap.schapWidth, vleesSchap.schapHeight);
+        // for (Product product3: vleesSchap.productList)
+        // {
+        //     gc.setFill(Color.PINK);
+        //     gc.fillRect(product3.posX, product3.posY, product3.productWidth, product3.productHeight);
+        // }
+
+        //teken de vakkenvuller
+        //gc.setFill(Color.GOLD);
+        //gc.fillRect(vakkenvuller.getIntX(), vakkenvuller.getIntY(), tileSize, tileSize)
     }
 }
