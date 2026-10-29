@@ -50,10 +50,6 @@ public class SimulatiePanel extends Canvas {
     private SpawnTimer spawnTimer;
 
 
-    /**
-     * Constructor: stelt de canvasgrootte in en geeft de medewerker
-     * zijn route en gedrag mee.
-     */
     public SimulatiePanel() {
 
         this.setWidth(screenWidth);
@@ -92,12 +88,7 @@ public class SimulatiePanel extends Canvas {
         lastFPSCheck = lastTime;
         accumulator = 0.0;
         frameCount = 0;
-        // Bereken verstreken tijd in seconden
-        // Accumuleer tijd
-        // Voer vaste updates uit zolang we genoeg tijd hebben
-        // Teken het scherm
-        // FPS-teller
-        // Simulatie loop
+
         simulatieLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -138,7 +129,7 @@ public class SimulatiePanel extends Canvas {
     }
 
     /**
-     * Stopt de animatielus. Wordt o.a. aangeroepen als het venster
+     * Stopt de animatielus. Wordt aangeroepen als het window
      * geminimaliseerd wordt, zodat de CPU niet onnodig belast wordt.
      */
     public void stopSimulatieThread() {
@@ -164,8 +155,6 @@ public class SimulatiePanel extends Canvas {
         // 2. Verwijder alle bewegers die klaar zijn
         npcBewegingen.removeIf(b -> b.isRouteFinished() && !b.isLoopRoute());
 
-        //test functie
-        //Randomizer.getRandomNumber();
     }
 
     //Tekent één frame: zwarte achtergrond + witte medewerker.

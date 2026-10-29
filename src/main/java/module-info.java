@@ -5,10 +5,11 @@ module Simulatie_Code {
     requires com.fasterxml.jackson.databind;
     requires java.desktop;
     requires org.json;
+    requires org.junit.jupiter.api;
 //    requires javafx.web;
 //
 //    requires jdk.jsobject;
-    opens Simulatie_Code to javafx.graphics, javafx.controls, javafx.fxml;
+    opens Simulatie_Code to javafx.graphics, javafx.controls, javafx.fxml, org.junit.platform.commons;
 //    requires org.controlsfx.controls;
 //    requires com.dlsc.formsfx;
 //    requires net.synedra.validatorfx;
