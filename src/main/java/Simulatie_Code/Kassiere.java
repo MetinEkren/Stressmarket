@@ -13,11 +13,11 @@ public class Kassiere extends Medewerker{
         return false;
     }
 
-    public static void MaakKassiere(List<NpcBeweging> npcBewegings) {
+    public static void MaakKassiere(List<NpcBeweging> npcBewegingen) {
 
         Kassiere kassiere = new Kassiere(150, 150);
 
         kassiere.setLoopRoute(false);
-        npcBewegings.add(kassiere);
+        npcBewegingen.add(kassiere);
     }
 }

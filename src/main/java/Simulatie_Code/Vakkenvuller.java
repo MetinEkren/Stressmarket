@@ -11,24 +11,45 @@ public class Vakkenvuller extends Medewerker{
 
     public static void checkSchap(Schap schap)
     {
-            int i = 1;
-            do {
-                schap.productList.add(new Product( schap.productList.get(i).posX, schap.posY,
-                        schap.schapWidth / 15,
-                        schap.schapHeight / 5,
-                        schap.schapType,
-                        i));
-                i++;
+        if (schap.amountOfProducts <= 15)
+        {
+            vulSchap(schap);
+        }
+    }
+
+    protected static void vulSchap(Schap schap)
+    {
+//        int neededProducts = schap.productCapacity - schap.amountOfProducts;
+//        System.out.println(neededProducts);
+        double posX = schap.posX + 32;
+        double posY = schap.posY + 15;
+
+        int neededProducts = schap.productCapacity - schap.amountOfProducts;
+            for (int i = schap.amountOfProducts; i < schap.productCapacity; i++) {
+                if (i != 0) {
+//                    posX = (i == (schap.productCapacity / 2) + 1) ? schap.posX : posX;
+                    if (neededProducts % 2 == 1){
+                        posX = (i == ((schap.productCapacity / 2) + schap.amountOfProducts / 2)) ? schap.productList.get(i - 2).posX : posX + 26.5;
+                        posY = (i >= (schap.productCapacity / 2) + (neededProducts / 2)) ? schap.posY + 45 : posY;
+                        }
+//                    else posY = (i >= (schap.productCapacity / 2) + 2) ? schap.posY + 45 : posY;
+
+                    schap.productList.add(new Product(posX, posY,
+                            schap.schapWidth / 15,
+                            schap.schapHeight / 5,
+                            schap.schapType,
+                            i + 1));
+                }
             }
-            while (schap.productList.size() < schap.productCapacity);
     }
 
     protected static void MaakVakkenvuller(List<NpcBeweging> NpcBewegingen, List<Schap> bestemmingen){
-        Vakkenvuller vakkenvuller = new Vakkenvuller(100, 200, 5);
-        vakkenvuller.addBestemming(450, 200);
+        Vakkenvuller vakkenvuller = new Vakkenvuller(150, 150, 5);
+        vakkenvuller.addBestemming(450, 150);
         vakkenvuller.addBestemming(450, 300);
-        vakkenvuller.addBestemming(100, 300);
-        vakkenvuller.addBestemming(100,200);
+        vakkenvuller.addBestemming(150, 300);
+        vakkenvuller.addBestemming(150,150);
+
 
         vakkenvuller.setLoopRoute(true);
         NpcBewegingen.add(vakkenvuller);

@@ -29,7 +29,6 @@ public class Schap {
         {
             posX = (i == 1 || (i == (amountOfProducts / 2) + 1)) ? this.posX + 26.5 : posX + 26.5;
             posY = (i >= (amountOfProducts / 2) + 1) ? this.posY + 45 : posY;
-//            posY = posX == 170 ? : posY + 10;
             productList.add(new Product(
                     posX, posY,
                     schapWidth / 15,
@@ -38,6 +37,12 @@ public class Schap {
                     i));
         }
     }
+
+//    protected List<Product> fillShelf()
+//    {
+//
+//        return productList;
+//    }
 
     protected double getIntX()
     {
